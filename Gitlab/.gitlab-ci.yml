@@ -1,0 +1,23 @@
+before_script:
+  - apt-get update -qq
+  - apt-get install -qq git
+  
+  # Setup SSH deploy keys
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  - eval $(ssh-agent -s)
+  - echo "$SSH_PRIVATE_KEY"
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    
+deploy_staging:
+  type: deploy
+  environment:
+    name: staging
+    url: example.com
+  script:
+    - ssh user@example "cd /repo_path && git checkout master && git pull origin master && exit"
+  only:
+    - master
+  tags:
+    - staging
