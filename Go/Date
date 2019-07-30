@@ -1,0 +1,17 @@
+package main
+
+import (
+	"fmt"
+	"time"
+	"strings"
+)
+
+func main() {
+
+	// Parse a time value from a string in dd-Mon-yy format.
+	date := "24/07/2019 11:43:32"
+	t, _ := time.Parse("02-01-2006 15:04:05", strings.ReplaceAll(date, "/", "-"))
+	//Format and print time
+	formatDate := t.Format("2006-01-02 15:04:05")
+	fmt.Println(formatDate)
+}
